@@ -50,10 +50,10 @@ def get_trends(data, matrix, window, states):
     return probs
 
 
-def anomalies_checking(data, matrix, window, interval, states):
-    probs = get_trends(data, matrix, window, states)
+def get_condition(data, matrix, window, interval, states):
+    trends = get_trends(data, matrix, window, states)
 
-    for prob in probs:
+    for prob in trends:
         if not (interval[0] < prob < interval[1]):
             return 1
     return 0
@@ -81,8 +81,8 @@ if __name__ == '__main__':
         transit_matrix = get_transit_matrix(data_list, all_states)
         interval = calculate_interval(data_list, transit_matrix, window, all_states)
 
-        result_true.append(anomalies_checking(data_true_list, transit_matrix, window, interval, all_states))
-        result_fake.append(anomalies_checking(data_fake_list, transit_matrix, window, interval, all_states))
+        result_true.append(get_condition(data_true_list, transit_matrix, window, interval, all_states))
+        result_fake.append(get_condition(data_fake_list, transit_matrix, window, interval, all_states))
 
     print("Data_true: ", sum(result_true) / raw_true.shape[0])
     print("Data_fake: ", 1 - sum(result_fake) / raw_fake.shape[0])
